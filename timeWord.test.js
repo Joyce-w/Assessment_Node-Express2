@@ -5,3 +5,9 @@ describe('#timeword', () => {
     expect(typeof timeWord).toBe('function');
   });
 });
+
+describe("Test time", () => {
+  test("00:00", () => {
+    expect(timeWord('24:00').toEqual('midnight'))
+  });
+})
