@@ -39,38 +39,42 @@ function timeWord(time) {
         40: 'forty',
         50: 'fifty'
     }
+
+    
+    //meridiem check
+    let meridiem = hour === 24 || hour < 12 ? 'am' : 'pm';
+
     //adjust hour to 12 hour
     if (hour > 12) {
         hour = hour - 12;
     }
+
     let hourWord = words[hour];
 
     // logic for
     let minuteWord;
 
     //if minute is less than 10
-    if (tenthPlace === 0) {
-        minuteWord = `oh ${words[onesPlace]}`
+    if (tenthPlace === 0 && onesPlace !== 0) {
+        minuteWord = 'oh ' + `${words[onesPlace]}`;
     }
-    if (tenthPlace == 00) {
+    if (tenthPlace === 0 && onesPlace === 0) {
         minuteWord = `o'clock`
     }
+    console.log(minutes)
     //if mins are 10s 
-    else if (onesPlace === 0) {
+    if (tenthPlace !== 0 && onesPlace === 0) {
         minuteWord = words[minutes];
     }
     // check for -teen words
-    else if (minutes > 9 && minutes < 20) {
+    if (minutes > 9 && minutes < 20) {
         minuteWord = words[minutes];
     }
-    else {
+    if (tenthPlace > 1 && onesPlace !== 0) {
         minutes = minutes - onesPlace;
         minuteWord = `${words[minutes]} ${words[onesPlace]}`
     }
 
-    //meridiem check
-    let meridiem = hour === 24 || hour < 12 ? 'am' : 'pm';
-    
     return `${hourWord} ${minuteWord} ${meridiem}`;
 
 }
