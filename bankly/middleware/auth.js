@@ -7,7 +7,13 @@ const { SECRET_KEY } = require('../config');
 
 function requireLogin(req, res, next) {
   try {
-    if (req.curr_username) {
+    // //check for authorization
+    const authHeader = req.headers && req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace(/^[Bb]earer /, "").trim();
+       req.curr_username = jwt.verify(token, SECRET_KEY);
+    }
+    if ( req.curr_username) {
       return next();
     } else {
       return next({ status: 401, message: 'Unauthorized' });

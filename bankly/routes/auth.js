@@ -4,6 +4,8 @@ const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const createTokenForUser = require('../helpers/createToken');
+const jsonschema = require('jsonschema')
+const ExpressError = require('../helpers/expressError');
 
 
 /** Register user; return token.
@@ -19,8 +21,15 @@ const createTokenForUser = require('../helpers/createToken');
 router.post('/register', async function(req, res, next) {
   try {
     const { username, password, first_name, last_name, email, phone } = req.body;
-    let user = await User.register({username, password, first_name, last_name, email, phone});
+    //Fixes Bug #3
+    const username_result = jsonschema.validate(username, { "type": "string" })
+    const password_result = jsonschema.validate(password, {"type" : "string"})
+    if (!username_result.valid && !password_result.valid) {
+      throw new ExpressError('Invalid username/password format', 401)
+    }
+    let user = await User.register({ username, password, first_name, last_name, email, phone });
     const token = createTokenForUser(username, user.admin);
+
     return res.status(201).json({ token });
   } catch (err) {
     return next(err);

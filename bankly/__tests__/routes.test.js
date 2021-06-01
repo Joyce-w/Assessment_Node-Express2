@@ -73,6 +73,23 @@ describe("POST /auth/register", function() {
       message: `There already exists a user with username 'u1'`
     });
   });
+
+  test("Return 401 if incorrect user/pw given", async function() {
+    const response = await request(app)
+      .post("/auth/register")
+      .send({
+        username: 123,
+        password: 321,
+        first_name: "testt",
+        last_name: "new_last",
+        email: "new@newuser.com",
+        phone: "1233211221"
+      });
+    console.log(response)
+    expect(response.statusCode).toBe(401);
+  });
+
+  
 });
 
 describe("POST /auth/login", function() {
@@ -90,6 +107,7 @@ describe("POST /auth/login", function() {
     expect(username).toBe("u1");
     expect(admin).toBe(false);
   });
+  
 });
 
 describe("GET /users", function() {
@@ -106,6 +124,14 @@ describe("GET /users", function() {
     expect(response.body.users.length).toBe(3);
   });
 });
+
+//BUG TEST #1
+  // test("No authUser but requireLogin", async function() {
+  //   const response = await request(app)
+  //     .get("/users")
+  //   expect(response.statusCode).toBe(200);
+  //   expect(response.body.users.length).toBe(3);
+  // });
 
 describe("GET /users/[username]", function() {
   test("should deny access if no token provided", async function() {
@@ -125,6 +151,14 @@ describe("GET /users/[username]", function() {
       email: "email1",
       phone: "phone1"
     });
+  });
+
+  //Tests bug #2
+  test("Error if no user exists", async function() {
+    const response = await request(app)
+      .get("/users/testUser")
+      .send({ _token: tokens.u1 });
+    expect(response.statusCode).toBe(404)
   });
 });
 

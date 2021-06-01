@@ -1,0 +1,3 @@
+- BUG #1: middleware requireLogin does not work if authUser fails.
+- Bug #2: User not found does not return 404 error.
+- Bug #3: does not validate username/password type in POST auth/register.
