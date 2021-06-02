@@ -51,13 +51,13 @@ router.post('/login', async function(req, res, next) {
     const { username, password } = req.body;
     //Fixes Bug #4
     const username_result = jsonschema.validate(username, { "type": "string" })
-    const password_result = jsonschema.validate(password, {"type" : "string"})
+    const password_result = jsonschema.validate(password, { "type": "string" })
+    
     if (!username_result.valid || !password_result.valid) {
       throw new ExpressError('Invalid username/password format', 401)
     }
 
     let user = User.authenticate(username, password);
-    console.log(user)
     const token = createTokenForUser(username, user.admin);
     return res.json({ token });
   } catch (err) {
