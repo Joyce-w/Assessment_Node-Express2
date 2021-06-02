@@ -74,6 +74,7 @@ describe("POST /auth/register", function() {
     });
   });
 
+  //Test for Bug #3
   test("Return 401 if incorrect user/pw given", async function() {
     const response = await request(app)
       .post("/auth/register")
@@ -85,7 +86,6 @@ describe("POST /auth/register", function() {
         email: "new@newuser.com",
         phone: "1233211221"
       });
-    console.log(response)
     expect(response.statusCode).toBe(401);
   });
 
@@ -106,6 +106,17 @@ describe("POST /auth/login", function() {
     let { username, admin } = jwt.verify(response.body.token, SECRET_KEY);
     expect(username).toBe("u1");
     expect(admin).toBe(false);
+  });
+
+  //Test Bug #4
+  test("Does not allow a correct username/password to log in", async function() {
+    const response = await request(app)
+      .post("/auth/login")
+      .send({
+        username: 123121212,
+        password: "0101010"
+      });
+    expect(response.statusCode).toBe(401);
   });
   
 });

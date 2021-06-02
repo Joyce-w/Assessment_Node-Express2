@@ -157,12 +157,10 @@ class User {
       [username]
     );
     const user = result.rows[0];
-
     if (!user) {
       throw new ExpressError('No such user', 404);
-    }
+    } 
 
-    return true;
   }
 }
 
