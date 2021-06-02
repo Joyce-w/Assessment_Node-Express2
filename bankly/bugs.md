@@ -1,4 +1,4 @@
-- BUG #1: authUser does not check for jwt in header + need to verify token not decode.
+- BUG #1: authUser does not check for jwt in header? ///Cannot figure out exact problem!
 - Bug #2: User not found does not return 404 error.
 - Bug #3: does not validate username/password type in POST auth/register.
 - Bug #4: does not throw correct error if username/pasword incorrect format.
